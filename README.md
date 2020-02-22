@@ -19,9 +19,7 @@ To install the dependencies:
 
         pip3 install -r requirements.txt
 
-A live demo you can try out:
-
-        http://52.156.250.103:5000/
+A live [demo](http://52.156.250.103:5000/) you can try out [here](http://52.156.250.103:5000/).
 
 The presentation of the project can be found [here](https://docs.google.com/presentation/d/1mENl24uh39z9Ett99aFVKVXii-qRruEmsRaLOm6jhvk/edit?usp=sharing).
 
