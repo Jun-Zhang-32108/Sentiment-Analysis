@@ -121,8 +121,17 @@ def update(id):
         task.content = request.form['content']
 
         test = preprocess_reviews([request.form['content']])
-        test = ngram_vectorizer.transform(test)
-        sentiment = int(clf.predict(test)[0])
+        print('updated review: {}'.format(test))
+        if FLAGS.model == 'trigram':
+            test = ngram_vectorizer.transform(test)
+            sentiment = int(clf.predict(test)[0])
+        elif FLAGS.model == 'bert':
+            input_examples = [run_classifier.InputExample(guid="", text_a = test[0], text_b = None, label = 0)] # here, "" is just a dummy label
+            input_features = run_classifier.convert_examples_to_features(input_examples, label_list, MAX_SEQ_LENGTH, tokenizer)
+            model_input = serialize_example(input_features[0].input_ids, input_features[0].input_mask, input_features[0].segment_ids, [input_features[0].label_id])
+            sentiment = int(predict_fn({'example': [model_input]})['labels'])
+        print('Sentiment: {}'.format(sentiment))
+        print(type(sentiment))
 
         task.sentiment_polarity = sentiment
 
