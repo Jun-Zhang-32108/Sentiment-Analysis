@@ -5,10 +5,50 @@ from utlis import preprocess_reviews
 
 from sklearn.metrics import accuracy_score
 from sklearn.externals import joblib # save and load model
+import argparse
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('-model',
+                    type=str,
+                    default='trigram',
+                    help='which model to be used for sentiment analysis')
+
+parser.add_argument('-modelPath',
+                    type=str,
+                    default='model/bert',
+                    help='the path of the model')
+
+FLAGS, unparsed = parser.parse_known_args()
 
 # load model of encoding and prediction
-clf = joblib.load("model/final_model_small.m")
-ngram_vectorizer = joblib.load("model/vectorizer_small.m")
+if FLAGS.model == 'trigram':
+    clf = joblib.load("model/final_model_small.m")
+    ngram_vectorizer = joblib.load("model/vectorizer_small.m")
+elif FLAGS.model == 'bert':
+    import tensorflow as tf
+    from bert import run_classifier
+    from utlis_bert import create_tokenizer_from_hub_module, serialize_example
+    # Please make sure you use Tensorflow 1.X
+    print('Tensorflow version: {}'.format(tf.__version__))
+    label_list = [0, 1]
+    MAX_SEQ_LENGTH = 128
+    tokenizer = create_tokenizer_from_hub_module()
+
+    # Load BERT model
+
+    # latest model file path
+    # from pathlib import Path
+    # export_dir = 'model/bert'
+    # subdirs = [x for x in Path(export_dir).iterdir()
+    #            if x.is_dir() and 'temp' not in str(x)]
+    # latest = str(sorted(subdirs)[-1])
+
+    model_path = FLAGS.modelPath
+    print("model_path: {}".format(model_path))
+    from tensorflow.contrib import predictor
+    predict_fn = predictor.from_saved_model(model_path)
+    # print(predict_fn)
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -35,8 +75,14 @@ def index():
 
         test = preprocess_reviews([task_content])
         print('review: {}'.format(test))
-        test = ngram_vectorizer.transform(test)
-        sentiment = int(clf.predict(test)[0])
+        if FLAGS.model == 'trigram':
+            test = ngram_vectorizer.transform(test)
+            sentiment = int(clf.predict(test)[0])
+        elif FLAGS.model == 'bert':
+            input_examples = [run_classifier.InputExample(guid="", text_a = test[0], text_b = None, label = 0)] # here, "" is just a dummy label
+            input_features = run_classifier.convert_examples_to_features(input_examples, label_list, MAX_SEQ_LENGTH, tokenizer)
+            model_input = serialize_example(input_features[0].input_ids, input_features[0].input_mask, input_features[0].segment_ids, [input_features[0].label_id])
+            sentiment = int(predict_fn({'example': [model_input]})['labels'])
         print('Sentiment: {}'.format(sentiment))
         print(type(sentiment))
 
