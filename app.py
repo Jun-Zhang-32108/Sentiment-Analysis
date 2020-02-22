@@ -7,6 +7,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.externals import joblib # save and load model
 import argparse
 
+polarity = ['Negative', 'Positive']
 parser = argparse.ArgumentParser()
 
 parser.add_argument('-model',
@@ -85,7 +86,7 @@ def index():
             sentiment = int(predict_fn({'example': [model_input]})['labels'])
         print('Sentiment: {}'.format(sentiment))
         print(type(sentiment))
-
+        sentiment = polarity[sentiment]
         new_task = Todo(content=task_content, sentiment_polarity = sentiment)
 
 
@@ -132,7 +133,7 @@ def update(id):
             sentiment = int(predict_fn({'example': [model_input]})['labels'])
         print('Sentiment: {}'.format(sentiment))
         print(type(sentiment))
-
+        sentiment = polarity[sentiment]
         task.sentiment_polarity = sentiment
 
         try:
