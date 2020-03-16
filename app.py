@@ -51,6 +51,24 @@ elif FLAGS.model == 'bert':
     predict_fn = predictor.from_saved_model(model_path)
     # print(predict_fn)
 
+elif FLAGS.model == 'transformer':
+    import torch
+    from utlis_Transformer import TransformerWithClfHead
+    from utlis_Transformer import predict as predict_transformer
+    # Tokenizer
+    from pytorch_transformers import BertTokenizer
+    tokenizer_transformer = BertTokenizer.from_pretrained('bert-base-cased', do_lower_case=False)
+
+    # Load fine-tuned model
+    model_path = FLAGS.modelPath
+    print("model_path: {}".format(model_path))
+    state_dict_fine_tuned = torch.load(model_path, map_location='cpu')
+    model_transformer = TransformerWithClfHead().to('cpu')
+    incompatible_keys_fine_tuned = model_transformer.load_state_dict(state_dict_fine_tuned, strict=False)
+    print(f"Parameters discarded from the pretrained model: {incompatible_keys_fine_tuned.unexpected_keys}")
+    print(f"Parameters added in the model: {incompatible_keys_fine_tuned.missing_keys}")
+
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
@@ -84,6 +102,10 @@ def index():
             input_features = run_classifier.convert_examples_to_features(input_examples, label_list, MAX_SEQ_LENGTH, tokenizer)
             model_input = serialize_example(input_features[0].input_ids, input_features[0].input_mask, input_features[0].segment_ids, [input_features[0].label_id])
             sentiment = int(predict_fn({'example': [model_input]})['labels'])
+        elif FLAGS.model == 'transformer':
+            result_transformer = predict_transformer(model_transformer, tokenizer_transformer, input = test)
+            sentiment = int(result_transformer[0][0])
+
         print('Sentiment: {}'.format(sentiment))
         print(type(sentiment))
         sentiment = polarity[sentiment]
@@ -131,6 +153,10 @@ def update(id):
             input_features = run_classifier.convert_examples_to_features(input_examples, label_list, MAX_SEQ_LENGTH, tokenizer)
             model_input = serialize_example(input_features[0].input_ids, input_features[0].input_mask, input_features[0].segment_ids, [input_features[0].label_id])
             sentiment = int(predict_fn({'example': [model_input]})['labels'])
+        elif FLAGS.model == 'transformer':
+            result_transformer = predict_transformer(model_transformer, tokenizer_transformer, input = test)
+            sentiment = int(result_transformer[0][0])
+
         print('Sentiment: {}'.format(sentiment))
         print(type(sentiment))
         sentiment = polarity[sentiment]
