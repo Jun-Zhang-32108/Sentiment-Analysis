@@ -3,7 +3,19 @@
 
 **\# Updated on Feb 17th, 2020 - Add the support of GPT-style Transformer model**  
 
-This repos is mainly about a simple RESTful api for sentiment analysis on movie review data. The api is built with **Flask**. Now the simple website support three different models: trigram+SVM , a [BERT](https://github.com/google-research/bert) based model which is fine-tuned on the movie review data and a [GPT-style](https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf) transformer with fine-tuning. The trigram + SVM scores around 90% ACC and F1 but performs just so so on the short reviews and not well on the negation while the BERT based model scores mores than 93% on ACC and F1 and performs quite well on the short especially emotional reviews. The GPT-style transformer model scores 92% on ACC and F1. The later two models both perform quite well on the ambiguous cases. A example can be seen from the Figure 1. A reasonable idea behind this is that word-embedding models like BERT can capture the deep contextual meaning of each words within each sentences while n-gram models fail to do that.  
+This repos is mainly about a simple RESTful api for sentiment analysis on movie review data. The api is built with **Flask**. Now the simple website support three different models: trigram+SVM , a [BERT](https://github.com/google-research/bert) based model which is fine-tuned on the movie review data and a [GPT-style](https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf) transformer with fine-tuning. The trigram + SVM scores around 90% ACC and F1 but performs just so so on the short reviews and not well on the negation while the BERT based model scores mores than 93% on ACC and F1 and performs quite well on the short especially emotional reviews. The GPT-style transformer model scores 92% on ACC and F1. The later two models both perform quite well on the ambiguous cases but BERT-based model is slightly better. A test example for BERT-based model and GPT-style Transformer can be seen from Figure 1 and Figure 2. A reasonable idea behind this is that word-embedding models like BERT can capture the deep contextual meaning of each words within each sentences while n-gram models fail to do that.  
+
+
+
+<figure class="half">
+    <h3> Figure 1 </h3>
+    <img src="https://github.com/Jun-Zhang-32108/Sentiment-Analysis/blob/master/IMG/Fig1.png" width="400" title="Figure1"/>
+    <h3> Figure 2 </h3>
+    <img src="https://github.com/Jun-Zhang-32108/Sentiment-Analysis/blob/master/IMG/Fig2.png" width="400" title="FIgure2"/>   
+</figure>
+
+
+
 
 To run the program with trigram + SVM model:
 
@@ -50,8 +62,12 @@ This repository is organized as follows:
  * `env` virtual environment
 
  * `static, templates` source code for the webpage
+ 
+ * `IMG` figures of test example
 
 
  ## Reference
 
 Devlin, Jacob, et al. "Bert: Pre-training of deep bidirectional transformers for language understanding." arXiv preprint [arXiv:1810.04805 (2018).](https://arxiv.org/abs/1810.04805)
+
+Radford A, Narasimhan K, Salimans T, et al. Improving language understanding by generative pre-training[J]. URL https://s3-us-west-2. amazonaws. com/openai-assets/researchcovers/languageunsupervised/language understanding paper. pdf, 2018.
