@@ -1,9 +1,9 @@
 # Sentiment Analysis on Movie Review Data
 ### Author: Jun Zhang \<jun.1.zhang@aalto.fi>
 
-**\# Updated on Feb 22th, 2020**  
+**\# Updated on Feb 17th, 2020 - Add the support of GPT-style Transformer model**  
 
-This repos is mainly about a simple RESTful api for sentiment analysis on movie review data. The api is built with **Flask**. Now the simple website support two different models: trigram+SVM and a [BERT](https://github.com/google-research/bert) based model which is fine-tuned on the movie review data. The trigram + SVM scores over 90% ACC and F1 but performs just so so on the short reviews and not well on the negation while the BERT based model scores only 88% on ACC and F1 but performs quite well on the short especially emotional reviews. A reasonable idea behind this is that word-embedding models like BERT can capture the deep contextual meaning of each words within each sentences while n-gram models fail to do that.  
+This repos is mainly about a simple RESTful api for sentiment analysis on movie review data. The api is built with **Flask**. Now the simple website support three different models: trigram+SVM , a [BERT](https://github.com/google-research/bert) based model which is fine-tuned on the movie review data and a [GPT-style](https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf) transformer with fine-tuning. The trigram + SVM scores around 90% ACC and F1 but performs just so so on the short reviews and not well on the negation while the BERT based model scores mores than 93% on ACC and F1 and performs quite well on the short especially emotional reviews. The GPT-style transformer model scores 92% on ACC and F1. The later two models both perform quite well on the ambiguous cases. A example can be seen from the Figure 1. A reasonable idea behind this is that word-embedding models like BERT can capture the deep contextual meaning of each words within each sentences while n-gram models fail to do that.  
 
 To run the program with trigram + SVM model:
 
@@ -13,7 +13,13 @@ To run the program with BERT model:
 
         python3 app.py -model bert -modelPath #where you store bert model#
 
+To run the program with GPT-style Transformer model:
+
+        python3 app.py -model transformer -modelPath #where you store transformer model#
+
 A ready-to-used model trained by me with BERT base uncased on movie review data can be found [here](https://drive.google.com/drive/folders/1Fb-bwNUewYckwTQVu3A0pwkAK2znVex8?usp=sharing).
+
+Fine-tuned transformer model on IMDB dataset can be found [here](https://drive.google.com/open?id=1nRKgnsazET0N5TpTPHXLerNQNvkk-hdH)
 
 To install the dependencies:
 

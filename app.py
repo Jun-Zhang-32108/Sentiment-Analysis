@@ -103,7 +103,7 @@ def index():
             model_input = serialize_example(input_features[0].input_ids, input_features[0].input_mask, input_features[0].segment_ids, [input_features[0].label_id])
             sentiment = int(predict_fn({'example': [model_input]})['labels'])
         elif FLAGS.model == 'transformer':
-            result_transformer = predict_transformer(model_transformer, tokenizer_transformer, input = test)
+            result_transformer = predict_transformer(model_transformer, tokenizer_transformer, input = test[0])
             sentiment = int(result_transformer[0][0])
 
         print('Sentiment: {}'.format(sentiment))
@@ -154,7 +154,7 @@ def update(id):
             model_input = serialize_example(input_features[0].input_ids, input_features[0].input_mask, input_features[0].segment_ids, [input_features[0].label_id])
             sentiment = int(predict_fn({'example': [model_input]})['labels'])
         elif FLAGS.model == 'transformer':
-            result_transformer = predict_transformer(model_transformer, tokenizer_transformer, input = test)
+            result_transformer = predict_transformer(model_transformer, tokenizer_transformer, input = test[0])
             sentiment = int(result_transformer[0][0])
 
         print('Sentiment: {}'.format(sentiment))

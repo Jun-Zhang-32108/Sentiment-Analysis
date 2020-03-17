@@ -13,3 +13,5 @@ tensorflow_hub
 bert-tensorflow
 numpy
 pandas
+torch
+pytorch_transformers
