@@ -1,9 +1,11 @@
-# Sentiment Analysis on Movie Review Data
+# Oscar Detector with Sentiment Analysis 
 ### Author: Jun Zhang \<jun.1.zhang@aalto.fi>
 
 **\# Updated on Feb 17th, 2020 - Add the support of GPT-style Transformer model**  
 
-This repos is mainly about a simple RESTful api for sentiment analysis on movie review data. The api is built with **Flask**. Now the simple website support three different models: trigram+SVM , a [BERT](https://github.com/google-research/bert) based model which is fine-tuned on the movie review data and a [GPT-style](https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf) transformer with fine-tuning. The trigram + SVM scores around 90% ACC and F1 but performs just so so on the short reviews and not well on the negation while the BERT based model scores mores than 93% on ACC and F1 and performs quite well on the short especially emotional reviews. The GPT-style transformer model scores 92% on ACC and F1. The later two models both perform quite well on the ambiguous cases but BERT-based model is slightly better. A test example for BERT-based model and GPT-style Transformer can be seen from Figure 1 and Figure 2. A reasonable idea behind this is that word-embedding models like BERT can capture the deep contextual meaning of each words within each sentences while n-gram models fail to do that.  
+In this project, I proposed a new way to detect the Oscar winners with sentiment analysis. We collect the reviews toward one movie of all the judges and apply sentiment analysis on the movie reviews. The result is regarded as evidence that if the judges are going to vote for that moview. We collect the voting and outputs the most possible winner. The presentation of the project can be found [here](https://docs.google.com/presentation/d/1mENl24uh39z9Ett99aFVKVXii-qRruEmsRaLOm6jhvk/edit?usp=sharing).
+
+Currently the part of sentiment analysis is implemented as a RESTful API with **Flask** and hosted in Azure server. Now the simple website support three different models (more models are explored and can be checked in the *jupyter_notebook* folder): trigram+SVM , a [BERT](https://github.com/google-research/bert) based model which is fine-tuned on the movie review data and a [GPT-style](https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf) transformer with fine-tuning. The trigram + SVM scores around 90% ACC and F1 but performs just so so on the short reviews and not well on the negation while the BERT based model scores mores than 93% on ACC and F1 and performs quite well on the short especially emotional reviews. The GPT-style transformer model scores 92% on ACC and F1. The later two models both perform quite well on the ambiguous cases but BERT-based model is slightly better. A test example for BERT-based model and GPT-style Transformer can be seen from Figure 1 and Figure 2. A reasonable idea behind this is that word-embedding models like BERT can capture the deep contextual meaning of each words within each sentences while n-gram models fail to do that.  
 
 
 
@@ -38,8 +40,6 @@ To install the dependencies:
         pip3 install -r requirements.txt
 
 A live [demo](http://52.156.250.103:5000/) you can try out [here](http://52.156.250.103:5000/).
-
-The presentation of the project can be found [here](https://docs.google.com/presentation/d/1mENl24uh39z9Ett99aFVKVXii-qRruEmsRaLOm6jhvk/edit?usp=sharing).
 
 ## Contents
 
